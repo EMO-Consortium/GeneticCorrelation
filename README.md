@@ -36,10 +36,13 @@ do
 --out /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/LDSC_out/$i\_vs_$n \
 --rg /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/sumstats/$i,/groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/sumstats/$n \
 --w-ld-chr eur_w_ld_chr/ 
+
+done
+
+done
+
 ```
 
-done
 
-done
 
 
