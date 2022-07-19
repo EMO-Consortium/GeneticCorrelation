@@ -47,6 +47,23 @@ done
 
 ```
 
+***Merge results from ldsc***
 
+```
+for i in *sumstats.gz.log
+
+do
+
+intercept=$(grep Intercept $i | sed -n "3,3p"  |awk '{print $2}')
+correlation=$(grep "Genetic Correlation" $i | sed -n "2,2p" | awk '{print $3}')
+Pvalue=$(grep "P:" $i | awk '{print $2}')
+
+echo -e "$i \t $intercept \t $correlation \t $Pvalue" >> Merged.results.txt
+
+echo $i
+
+done
+
+```
 
 
