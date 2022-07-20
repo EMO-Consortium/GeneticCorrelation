@@ -17,6 +17,8 @@ cd /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/filter
 --chunksize 500000
 
 ```
+Check allele direction.
+
 
 ***ldsc***
 
