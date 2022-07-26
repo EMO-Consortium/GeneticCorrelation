@@ -68,4 +68,30 @@ done
 
 ```
 
+***Split locus***
+
+```
+cat Lava.significant.results.txt | while read line
+
+do
+
+start=$(echo $line | cut -f5 -d" ")
+stop=$(echo $line | cut -f6 -d" ")
+chr=$(echo $line | cut -f4 -d" ")
+number=$(echo $line | cut -f1 -d" ")
+
+zcat ../raw_summary/CD.txt.gz | awk -v STA="$start" -v STO="$stop" -v CHR="$chr" '{if ($3==CHR && $4>STA && $4<STO) print $2}' > Locus.$chr.$number.txt
+
+echo -e "CHR $chr Locus $number done"
+
+done
+```
+
+
+
+
+
+
+
+
 
