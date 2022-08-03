@@ -86,6 +86,47 @@ echo -e "CHR $chr Locus $number done"
 
 done
 ```
+***Extract eQTL from GTEx***
+
+```
+tar -zxvf GTEx_Analysis_v7_eQTL_all_associations.tar.gz GTEx_Analysis_v7_eQTL_all_associations/Small_Intestine_Terminal_Ileum.allpairs.txt.gz
+tar -zxvf GTEx_Analysis_v7_eQTL_all_associations.tar.gz GTEx_Analysis_v7_eQTL_all_associations/Colon_Sigmoid.allpairs.txt.gz
+tar -zxvf GTEx_Analysis_v7_eQTL_all_associations.tar.gz GTEx_Analysis_v7_eQTL_all_associations/Colon_Transverse.allpairs.txt.gz
+
+
+```
+
+***Coloc eQTL***
+
+```
+for i in Locus*txt
+
+do
+
+locus=${i%.txt}
+awk ' FNR==NR { a[$1]=$1; next } $1 in a { print $2 }' $i ../All.pairs.txt > $locus.tmp
+cat $locus.tmp | sort | uniq > $locus.gene
+rm $locus.tmp
+
+done
+
+```
+
+
+
+```
+cd  Locus.11.1733
+cat Locus.11.1733.gene | while read line
+
+do
+awk -v gene="$line" '{if($1==gene) print}' > $line.summary.txt
+echo $line
+done
+
+```
+
+
+
 
 
 
