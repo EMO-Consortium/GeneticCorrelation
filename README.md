@@ -119,7 +119,7 @@ cd  Locus.11.1733
 cat Locus.11.1733.gene | while read line
 
 do
-awk -v gene="$line" '{if($1==gene) print}' > $line.summary.txt
+awk -v gene="$line" '{if($2==gene) print}' ../All.pairs.txt > $line.summary.txt
 echo $line
 done
 
