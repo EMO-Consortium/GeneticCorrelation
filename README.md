@@ -149,6 +149,14 @@ cd  Locus.11.1733
 --out Locus.11.1733.eQTLGen 
 
 awk '{print $7}' Locus.11.1733.eQTLGen.txt  | sort | uniq > Locus.11.1733.eQTLGen.gene.txt
+
+cat Locus.11.1733.eQTLGen.gene.txt | while read line
+do
+awk -v gene="$line" 'OFS="\t"{if($7==gene)print $1,$12,$13}' Locus.11.1733.eQTLGen.txt > Locus.11.1733.$line.trait
+sed -i "1i\SNP\tbeta\tse" Locus.11.1733.$line.trait
+echo $line
+done
+
 ```
 
 
