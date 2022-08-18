@@ -125,6 +125,18 @@ done
 
 ```
 
+extract eQTLGen
+```
+cd  Locus.11.1733
+
+/groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
+--beqtl-summary /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/eQTL/eQTLGen/cis-eQTLs-full_eQTLGen_AF_incl_nr_formatted_20191212.new.txt_besd-dense \
+--extract-snp Locus.11.1733.txt \
+--query 1 \
+--out Locus.11.1733.eQTLGen 
+
+```
+
 
 
 
