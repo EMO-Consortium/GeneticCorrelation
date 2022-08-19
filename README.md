@@ -216,6 +216,47 @@ write.table(se,file = name2,row.names = T,sep = "\t",quote = F)
 
 ```
 
+***HyprColoc***
+
+```
+
+library(foreach)
+trait1="CD"
+trait2="Anorexia_nervosa"
+traitN=temp[temp %like% "ENSG"]
+
+result=foreach(i=1:length(traitN),.combine = rbind) %do%  {
+  tmp.trait=traitN[i]
+  
+  tmp.beta=beta[,c(colnames(beta)[colnames(beta) %like% trait1],
+                   colnames(beta)[colnames(beta) %like% trait2],
+                   colnames(beta)[colnames(beta) %like% tmp.trait]),drop=F]
+  tmp.se=se[,c(colnames(se)[colnames(se) %like% trait1],
+                   colnames(se)[colnames(se) %like% trait2],
+                   colnames(se)[colnames(se) %like% tmp.trait]),drop=F]
+  tmp.beta=na.omit(tmp.beta)
+  tmp.se=na.omit(tmp.se)
+  
+  tmp.snp=intersect(rownames(tmp.beta),rownames(tmp.se))
+  tmp.beta=tmp.beta[rownames(tmp.beta) %in% tmp.snp,]
+  tmp.se=tmp.se[rownames(tmp.se) %in% tmp.snp,]
+  
+  colnames(tmp.beta)=c(trait1,trait2,tmp.trait)
+  colnames(tmp.se)=c(trait1,trait2,tmp.trait)
+  
+  traits <- c(trait1,trait2,tmp.trait)
+  rsid <- rownames(tmp.snp)
+  
+  mm=hyprcoloc(as.matrix(tmp.beta), as.matrix(tmp.se), trait.names=traits, snp.id=rsid)
+  aa=as.data.frame(mm$results)
+  aa$GeneTrait=tmp.trait
+  
+  return.string=aa
+  
+}
+
+
+```
 
 
 
