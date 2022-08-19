@@ -165,10 +165,27 @@ cd  Locus.11.1733
 extract GWAS
 
 ```
-awk ' FNR==NR { a[$1]=$1; next } $1 in a { print a[$1] "\t" $0 }'  Locus.11.1733.txt ../../../GWAS_beta/CD.beta.se.txt > Locus.11.1733.CD.trait
+cd  Locus.11.1733
+
+awk 'FNR==NR { a[$1]=$1; next } $1 in a { print $0 }'  Locus.11.1733.txt ../../../GWAS_beta/CD.beta.se.txt > Locus.11.1733.CD.trait
+
+sed -i "1i\SNP\tbeta\tse" Locus.11.1733.CD.trait
+sed -i "s/ /\t/g" Locus.11.1733.CD.trait
+
 ```
 
+harmonize all traits
 
+```
+cd  Locus.11.1733
+
+Rscript ------
+
+temp = list.files(pattern="*.trait")
+traits = lapply(temp, read.delim)
+
+
+```
 
 
 
