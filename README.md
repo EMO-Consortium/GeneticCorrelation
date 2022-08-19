@@ -179,8 +179,9 @@ harmonize all traits
 ```
 cd  Locus.11.1733
 
-Rscript ------
+Rscript ----------
 
+.libPaths( c( .libPaths(), "/groups/umcg-weersma/tmp01/Shixian/Rpackage") )
 args = commandArgs(trailingOnly=TRUE)
 
 # args[1] is beta.file
