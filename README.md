@@ -160,12 +160,13 @@ cd  Locus.11.1733
 --query 1 \
 --out Locus.11.1733.eQTLGen 
 
-
-
-
 ```
 
+extract GWAS
 
+```
+awk ' FNR==NR { a[$1]=$1; next } $1 in a { print a[$1] "\t" $0 }'  Locus.11.1733.txt ../../../GWAS_beta/CD.beta.se.txt > Locus.11.1733.CD.trait
+```
 
 
 
