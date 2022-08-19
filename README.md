@@ -181,8 +181,11 @@ cd  Locus.11.1733
 
 Rscript ----------
 
+options = commandArgs(trailingOnly = TRUE)
+name1=options[1]
+name2=options[2]
+
 .libPaths( c( .libPaths(), "/groups/umcg-weersma/tmp01/Shixian/Rpackage") )
-args = commandArgs(trailingOnly=TRUE)
 
 # args[1] is beta.file
 # args[2] is se.file
@@ -208,8 +211,8 @@ aa$rn=NULL
 beta=aa[,colnames(aa) %like% "beta_Locus"]
 se=aa[,colnames(aa) %like% "se_Locus"]
 
-write.table(beta,file = args[1],row.names = T,sep = "\t",quote = F)
-write.table(se,file = args[2],row.names = T,sep = "\t",quote = F)
+write.table(beta,file = name1,row.names = T,sep = "\t",quote = F)
+write.table(se,file = name2,row.names = T,sep = "\t",quote = F)
 
 ```
 
