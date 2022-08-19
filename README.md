@@ -181,9 +181,34 @@ cd  Locus.11.1733
 
 Rscript ------
 
-temp = list.files(pattern="*.trait")
-traits = lapply(temp, read.delim)
+args = commandArgs(trailingOnly=TRUE)
 
+# args[1] is beta.file
+# args[2] is se.file
+
+require(plyr)
+library(data.table)
+
+temp = list.files(pattern="*.trait")
+for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i],header = T,stringsAsFactors = F,sep = "\t",row.names = 1))
+
+trait_list=list()
+for(i in 1:length(temp)){
+  mm=as.data.frame(get(temp[i]))
+  colnames(mm)=paste(colnames(mm),temp[i],sep = "_")
+  mm$rn=rownames(mm)
+  trait_list=append(trait_list,list(mm))
+}
+
+aa <- join_all(trait_list, by = 'rn', type = 'full')
+rownames(aa)=aa$rn
+aa$rn=NULL
+
+beta=aa[,colnames(aa) %like% "beta_Locus"]
+se=aa[,colnames(aa) %like% "se_Locus"]
+
+write.table(beta,file = args[1],row.names = T,sep = "\t",quote = F)
+write.table(se,file = args[2],row.names = T,sep = "\t",quote = F)
 
 ```
 
