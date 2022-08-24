@@ -235,11 +235,14 @@ require(plyr)
 library(data.table)
 
 temp = list.files(pattern="*.trait")
-for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i],header = T,stringsAsFactors = F,sep = "\t",row.names = 1))
+for (i in 1:length(temp)) assign(temp[i], read.csv(temp[i],header = T,stringsAsFactors = F,sep = "\t",row.names = NULL))
 
 trait_list=list()
 for(i in 1:length(temp)){
   mm=as.data.frame(get(temp[i]))
+  mm=mm[!duplicated(mm$SNP),]
+  rownames(mm)=mm$SNP
+  mm$SNP=NULL
   colnames(mm)=paste(colnames(mm),temp[i],sep = "_")
   mm$rn=rownames(mm)
   trait_list=append(trait_list,list(mm))
