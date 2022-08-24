@@ -152,13 +152,36 @@ done
 extract GTEx
 
 ```
-cd  Locus.11.1733
+
+for n in /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/eQTL/Coloc/Locus*
+
+do
+
+i=$(basename $n)
+cd $n
 
 /groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
---beqtl-summary /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/eQTL/eQTLGen/cis-eQTLs-full_eQTLGen_AF_incl_nr_formatted_20191212.new.txt_besd-dense \
---extract-snp Locus.11.1733.txt \
+--beqtl-summary //groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/eQTL/GTEx/Small_Intestine_Terminal_Ileum/Small_Intestine_Terminal_Ileum \
+--extract-snp //groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/LAVA_locus/$i.txt \
 --query 1 \
---out Locus.11.1733.eQTLGen 
+--out $i.GTEx.Ileum
+
+awk '{print $7}' $i.GTEx.Ileum.txt | sort | uniq > $i.Ileum.gene.txt
+
+cat $i.Ileum.gene.txt | while read line
+
+do
+awk -v gene="$line" 'OFS="\t"{if($7==gene)print $1,$12,$13}' $i.GTEx.Ileum.txt > $i.$line.Ileum.trait
+
+sed -i "1i\SNP\tbeta\tse" $i.$line.Ileum.trait
+
+echo $line
+done
+
+echo -e "$i +++++"
+
+done
+
 
 ```
 
