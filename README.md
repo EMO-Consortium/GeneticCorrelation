@@ -188,12 +188,30 @@ done
 extract GWAS
 
 ```
-cd  Locus.11.1733
+for n in /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/eQTL/Coloc/Locus*
 
-awk 'FNR==NR { a[$1]=$1; next } $1 in a { print $0 }'  Locus.11.1733.txt ../../../GWAS_beta/CD.beta.se.txt > Locus.11.1733.CD.trait
+do
 
-sed -i "1i\SNP\tbeta\tse" Locus.11.1733.CD.trait
-sed -i "s/ /\t/g" Locus.11.1733.CD.trait
+locus=$(basename $n)
+
+cd $n
+
+for i in //groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/GWAS_beta/*beta.se.txt
+
+do
+
+gwas=$(basename $i)
+gwas=$(echo $gwas | cut -f1 -d".")
+awk 'FNR==NR { a[$1]=$1; next } $1 in a { print $0 }' /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Mental_disease/LAVA_locus/$locus.txt $i > $locus.$gwas.trait
+sed -i "1i\SNP\tbeta\tse" $locus.$gwas.trait
+sed -i "s/ /\t/g" $locus.$gwas.trait
+
+echo -e "$locus +++ $gwas"
+done
+
+done
+
+
 
 ```
 
