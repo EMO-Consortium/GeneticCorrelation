@@ -1,5 +1,14 @@
 # GeneticCorrelation
 
+This file is about the GWAS pre-process at Linux system.
+
+For genetic correlation files, see sumstats.
+
+For Oxidative Stress in CD patients, see Oxidative Stree Project.
+
+Contact person: hushx9@mail.sysu.edu.cn
+
+
 ***Summary statistics***
 
 ```
