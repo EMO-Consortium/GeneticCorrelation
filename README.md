@@ -77,7 +77,7 @@ done
 
 ```
 
-***Split locus***
+***Split locus: to extract LAVA enriched SNPs or genes for next coloc or SMR***
 
 ```
 cat Lava.significant.results.txt | while read line
@@ -104,6 +104,19 @@ tar -zxvf GTEx_Analysis_v7_eQTL_all_associations.tar.gz GTEx_Analysis_v7_eQTL_al
 
 
 ```
+
+***Subset GTEx SMR summary***
+```
+ml PLINK/1.9-beta6-20190617
+/groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
+--beqtl-summary /groups/umcg-gastrocol/tmp01/Shixian/DUOX2/eQTLTissue/Colon_Sigmoid \
+--extract-probe All.LAVA.gene.txt \
+--make-besd \
+--out  Colon_Sigmoid.LAVA
+```
+
+
+
 
 ***Coloc eQTL***
 
