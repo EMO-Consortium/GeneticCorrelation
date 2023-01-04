@@ -115,7 +115,19 @@ ml PLINK/1.9-beta6-20190617
 --out  Colon_Sigmoid.LAVA
 ```
 
+***re-format mbQTL summaries***
+```
+awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange.tsv > tmp.tsv
+sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/" tmp.txt
 
+ml PLINK/1.9-beta6-20190617
+
+/groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
+--eqtl-summary tmp.txt \
+--gemma-format --make-besd \
+--out  GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange
+
+```
 
 
 ***Coloc eQTL***
