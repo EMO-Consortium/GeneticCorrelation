@@ -128,6 +128,7 @@ ml PLINK/1.9-beta6-20190617
 
 /groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
 --eqtl-flist $name.flist \
+--cis-wind 1 --trans-wind 1000 --peqtl-trans 1.0e-5 --peqtl-other 1.0e-5 \
 --gemma-format --make-besd \
 --out  $name.BESD
 
