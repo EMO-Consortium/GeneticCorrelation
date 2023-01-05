@@ -138,7 +138,6 @@ ml PLINK/1.9-beta6-20190617
 --beqtl-summary $name.BESD \
 --peqtl-smr 1e-05 --thread-num 10 \
 --diff-freq-prop 0.9 --diff-freq 1 --out SMR.$name \
---smr-multi \
 --trans --trans-wind 1000 
 
 ```
