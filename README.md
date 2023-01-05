@@ -120,7 +120,7 @@ ml PLINK/1.9-beta6-20190617
 file="GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange.tsv.gz"
 name=${file%.tsv*}
 
-zcat $file | awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' > $name.tsv
+zcat $file | awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' | awk '!seen[$2]++'> $name.tsv
 sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/" $name.tsv
 cat Flist.file.all.txt | { head -1; grep $name; } > $name.flist
 
