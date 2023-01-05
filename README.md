@@ -117,15 +117,28 @@ ml PLINK/1.9-beta6-20190617
 
 ***re-format mbQTL summaries***
 ```
-awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange.tsv > tmp.tsv
-sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/" tmp.txt
+file="GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange.tsv.gz"
+name=${file%.tsv*}
+
+zcat $file | awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' > $name.tsv
+sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/" $name.tsv
+cat Flist.file.all.txt | { head -1; grep $name; } > $name.flist
 
 ml PLINK/1.9-beta6-20190617
 
 /groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
---eqtl-summary tmp.txt \
+--eqtl-flist $name.flist \
 --gemma-format --make-besd \
---out  GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange
+--out  $name.BESD
+
+/groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
+--bfile /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Metabolic_disease/reference/1000G.Euro \
+--gwas-summary /groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Metabolic_disease/GWAS_beta/LDL.txt \
+--beqtl-summary $name.BESD \
+--peqtl-smr 1e-05 --thread-num 10 \
+--diff-freq-prop 0.9 --diff-freq 1 --out SMR.$name \
+--smr-multi \
+--trans --trans-wind 1000 
 
 ```
 
