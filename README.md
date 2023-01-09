@@ -357,6 +357,14 @@ result=foreach(i=1:length(traitN),.combine = rbind) %do%  {
 ml RPlus/4.2.1-foss-2022a-v22.12.1
 ml GCC/7.3.0-2.30
 
+file="GWAS_HSERMETANA.PWY..L.methionine.biosynthesis.III.rearrange.tsv.gz"
+name=$(basename $file)
+name=${name%.tsv*}
+
+zcat $file | awk 'OFS="\t"{if($1!="NA")print $3,$1,$4,7899,$5,$6,$7,$8,$9,5,$2}' | awk '!seen[$2]++'> $name.tsv
+sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/" $name.tsv
+
+Rscript TwoSampleMR.R $name.tsv CD.txt
 
 
 ```
