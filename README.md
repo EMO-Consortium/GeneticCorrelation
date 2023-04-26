@@ -436,3 +436,55 @@ Rscript TwoSampleMR.R $name.tsv CD.txt
 
 ```
 
+***SMR***
+```
+
+#!/bin/bash
+
+helpFunction()
+{
+   echo ""
+   echo "Usage: $0 -a parameterA -b parameterB -c parameterC"
+   echo -e "\t-a parameterA absolute location of GWAS data"
+   echo -e "\t-b parameterB absolute location of QTL data"
+   echo -e "\t-c parameterC absolute location of output file"
+   exit 1 # Exit script after printing help
+}
+
+while getopts "a:b:c:" opt
+do
+   case "$opt" in
+      a ) parameterA="$OPTARG" ;;
+      b ) parameterB="$OPTARG" ;;
+      c ) parameterC="$OPTARG" ;;
+      ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
+   esac
+done
+
+# Print helpFunction in case parameters are empty
+if [ -z "$parameterA" ] || [ -z "$parameterB" ] || [ -z "$parameterC" ]
+then
+   echo "Some or all of the parameters are empty";
+   helpFunction
+fi
+
+# Begin script in case all parameters are correct
+echo -e "GWAS data ***** $parameterA"
+echo -e "QTL data ***** $parameterB"
+echo -e "Output file ***** $parameterC"
+
+
+ml PLINK/1.9-beta6-20190617
+/groups/umcg-gastrocol/tmp01/Shixian/Tools/smr_v1.3.1_linux_x86_64_static/smr_v1.3.1_linux_x86_64_static \
+--bfile /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Reference/g1000_eur \
+--gwas-summary $parameterA \
+--beqtl-summary $parameterB \
+--peqtl-smr 1e-05 --thread-num 10 \
+--diff-freq-prop 0.9 --diff-freq 1 \
+--out $parameterC \
+--smr-multi
+```
+
+
+
+
