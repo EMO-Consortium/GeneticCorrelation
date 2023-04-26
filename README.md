@@ -77,6 +77,73 @@ done
 
 ```
 
+***Merge LAVA results and annotate with genes***
+```
+
+library(data.table)
+
+filenames <- list.files("LAVAoutput/", pattern="bivar.lava", full.names=TRUE)
+lava.out <- rbindlist(lapply(filenames,fread))
+lava.out=na.omit(lava.out)
+
+# select pairs, between gastro diseases and respiratory diseases
+disease_gastro=c("CD","UC","Celiac_disease","Diverticular_disease","Esophageal_cancer","Gastro_reflux","Gastric_cancer",
+                 "IBS","Peptic_ulcer","Chronic_gastritis","CRC")
+disease_respiratory=c("Allergy","MtoS_asthma","FEV1","FVC","Asthma","FEV1_to_FVC","Atopic_dermatitis","hayfever",
+                      "AOA","COA")
+
+tmp1=c()
+for(i in disease_gastro){
+  for(n in disease_respiratory){
+    mm=paste(i,n,sep = "_")
+    tmp1=append(tmp1,mm)
+  }
+}
+tmp2=c()
+for(i in disease_respiratory){
+  for(n in disease_gastro){
+    mm=paste(i,n,sep = "_")
+    tmp2=append(tmp2,mm)
+  }
+}
+uniq_pairs=unique(c(tmp1,tmp2))
+
+lava.out$pairs=paste(lava.out$phen1,lava.out$phen2,sep = "_")
+unique(lava.out$pairs[!lava.out$pairs %in% uniq_pairs])
+lava.out=lava.out[lava.out$pairs %in% uniq_pairs,]
+lava.out$FDR=p.adjust(lava.out$p,method = "BH")
+
+lava.sig=lava.out[lava.out$FDR<0.05,]
+
+library(biomaRt)
+mart <- useMart("ensembl")
+mart <- useMart( "ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl", host = "www.ensembl.org" ) # could be disrupted, try more times
+
+attributes <- c("ensembl_gene_id","start_position","end_position","strand","hgnc_symbol","chromosome_name","ucsc","band")
+filters <- c("chromosome_name","start","end")
+
+locus_summary=lava.sig[,c("locus","chr","start","stop")]
+locus_summary=locus_summary[!duplicated(locus_summary),]
+locus_summary$symbol=NA
+locus_summary$ensemble=NA
+for(i in 1:nrow(locus_summary)){
+  tmp.values=list(chromosome=as.character(locus_summary$chr[i]),start=as.character(locus_summary$start[i]),end=as.character(locus_summary$stop[i]))
+  tmp.genes=getBM(attributes=attributes, filters=filters, values=tmp.values, mart=mart)
+  tmp.symbol=unique(tmp.genes$hgnc_symbol)
+  tmp.ensemble=unique(tmp.genes$ensembl_gene_id)
+  
+  tmp.symbol=paste(tmp.symbol, collapse = ',')
+  tmp.ensemble=paste(tmp.ensemble, collapse = ',')
+  locus_summary$symbol[i]=(tmp.symbol)
+  locus_summary$ensemble[i]=tmp.ensemble
+  
+  cat(i,"\n")
+}
+lava=merge(lava,locus_summary[,c("locus","symbol","ensemble")],by="locus",all=F)
+
+```
+
+
 ***Split locus: to extract LAVA enriched SNPs or genes for next coloc or SMR***
 
 ```
