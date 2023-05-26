@@ -485,6 +485,15 @@ ml PLINK/1.9-beta6-20190617
 --smr-multi
 ```
 
+***CELLECT***
+
+```
+cd /groups/umcg-griac/tmp01/projects/umcg-cqi/geneticcorrelation/tools/tmp.conda/bin
+./conda info --envs
+conda activate snakemake
+
+Then follow the tutorial https://github.com/perslab/CELLECT/wiki/CELLECT-LDSC-Tutorial and https://github.com/perslab/CELLECT/wiki/CELLECT-MAGMA-Tutorial
+```
 
 
 
