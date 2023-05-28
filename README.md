@@ -488,6 +488,8 @@ ml PLINK/1.9-beta6-20190617
 ***CELLECT***
 
 ```
+Default python version Python 3.11.3 
+
 cd /groups/umcg-griac/tmp01/projects/umcg-cqi/geneticcorrelation/tools/tmp.conda/bin
 ./conda info --envs
 conda activate snakemake
