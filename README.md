@@ -433,7 +433,63 @@ sed -i "1s/.*/chr rs  ps  n_miss  allel1  allel0  af  beta  se  l_remle p_wald/"
 
 Rscript TwoSampleMR.R $name.tsv CD.txt
 
+```
 
+```
+args <- commandArgs(trailingOnly = TRUE)
+.libPaths("/groups/umcg-weersma/tmp01/Shixian/Rpackage/")
+
+library(TwoSampleMR)
+library(MRInstruments)
+library(ieugwasr)
+
+test_exposure=read.table(args[1],header = T,stringsAsFactors = F)
+test_outcome=read.table(args[2],header = T,stringsAsFactors = F)
+test_outcome$NA.=NULL
+
+print("+++ Read files done")
+
+exposure.name=tools::file_path_sans_ext(basename(args[1]))
+outcome.name=tools::file_path_sans_ext(basename(args[2]))
+
+colnames(test_exposure)=c("chr","SNP","ps","n_miss","effect_allele","other_allele","eaf","beta","se","l_remle","P")
+test_exposure$Phenotype=exposure.name
+dat_exp <- format_data(test_exposure, type="exposure")
+colnames(test_outcome)=c("SNP","effect_allele","other_allele","eaf","beta","se","P")
+test_outcome$Phenotype=outcome.name
+dat_out <- format_data(test_outcome, type="outcome")
+
+print("+++ Change format done")
+
+# clumping
+dat_clump <- ld_clump(
+  dplyr::tibble(rsid=dat_exp$SNP, pval=dat_exp$pval.exposure, id=dat_exp$exposure),
+  plink_bin = "/groups/umcg-weersma/tmp01/Shixian/Tools/plink",
+  bfile = "/groups/umcg-gastrocol/tmp01/Shixian/GeneticCorrelation/Metabolic_disease/reference/EUR"
+)
+dat_exp=dat_exp[dat_exp$SNP %in% dat_clump$rsid,]
+dat_exp=dat_exp[dat_exp$pval.exposure<5e-6,]
+
+print("+++ Clumping done")
+
+# harmonize
+dat_harm <- harmonise_data(
+  exposure_dat = dat_exp,
+  outcome_dat = dat_out
+)
+dat_harm$mr_keep="TRUE"
+dat_harm$mr_keep=as.logical(dat_harm$mr_keep)
+
+# run analysis
+test_MR <- mr(dat_harm,method_list=c("mr_egger_regression", "mr_ivw","mr_wald_ratio","mr_weighted_median"))
+test_hetero=mr_heterogeneity(dat_harm)
+test_pleiotropy=mr_pleiotropy_test(dat_harm)
+
+print("+++ Analysis done")
+
+write.table(test_MR,file = paste(outcome.name,exposure.name,"MR.txt",sep = "."),sep = "\t",quote = F,row.names = F)
+write.table(test_hetero,file = paste(outcome.name,exposure.name,"heterogeneity.txt",sep = "."),sep = "\t",quote = F,row.names = F)
+write.table(test_pleiotropy,file = paste(outcome.name,exposure.name,"pleiotropy.txt",sep = "."),sep = "\t",quote = F,row.names = F)
 ```
 
 ***SMR***
