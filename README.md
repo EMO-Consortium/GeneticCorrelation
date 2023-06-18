@@ -546,6 +546,8 @@ ml PLINK/1.9-beta6-20190617
 ```
 cd /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/cellex/
 python
+import sys
+sys.path.append("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/cellex")
 
 import numpy as np # needed for formatting data for this tutorial
 import pandas as pd # needed for formatting data for this tutorial
