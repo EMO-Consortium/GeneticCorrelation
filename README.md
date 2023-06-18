@@ -544,6 +544,15 @@ ml PLINK/1.9-beta6-20190617
 ***CELLECT***
 
 ```
+cd /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/cellex/
+python
+
+import numpy as np # needed for formatting data for this tutorial
+import pandas as pd # needed for formatting data for this tutorial
+import cellex
+```
+
+```
 Default python version Python 3.11.3 
 
 cd /groups/umcg-griac/tmp01/projects/umcg-cqi/geneticcorrelation/tools/tmp.conda/bin
