@@ -19,6 +19,7 @@ install.packages("hdf5r",configure.args="--with-hdf5=/groups/umcg-griac/tmp01/pr
 ```R
 ### R/4.2.2-foss-2022a-bare
 .libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
+dyn.load("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib/libhdf5_hl.so.310", lib.loc = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib")
 library(Seurat)
 library(tidyverse)
 library(here)
