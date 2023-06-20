@@ -38,3 +38,32 @@ pfile <- as.loom(x = seurat_obj, filename = "CO_EPI.loom", verbose = TRUE, overw
 pfile$close_all()
 
 ```
+
+## Import packages
+```python
+import loompy         # needed for importing data
+import numpy as np    # needed for formatting data
+import pandas as pd   # needed for formatting data
+import cellex
+
+
+### Set constants
+
+dirOut = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/CD_Ramik/CO_EPI/out"                    # output directory for results and plots
+prefixData = "CO_EPI"                      # prefix to prepend to files
+pathData = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/CD_Ramik/CO_EPI/CO_EPI.loom"
+
+nameAnno = "Celltype"                  # metadata annotation column attribute name
+nameId = "CellID"                             # metadata cell id column attribute name
+nameClass = "Celltype"                  # possible classes to group by: trajectory_main, trajectory_sub
+
+with loompy.connect(pathData) as ds:
+    rows = (ds.row_attrs["Gene"])
+    cols = (ds.col_attrs[nameId])
+    #our data
+    data = pd.DataFrame(ds[:, :], index=rows, columns=cols)
+    # the type-annotation for individual cells
+    metadata = pd.DataFrame(data={"cell_type" : ds.col_attrs[nameAnno]}, index=ds.col_attrs[nameId])
+    metadata_class = pd.DataFrame(data={"cell_class" : ds.col_attrs[nameClass]}, index=ds.col_attrs[nameAnno])
+    
+```
