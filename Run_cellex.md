@@ -64,6 +64,9 @@ pfile$close_all()
 ```python
 ### Python 3.10.4
 ### import packages
+import sys
+sys.path.append("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/")
+
 import loompy         # needed for importing data
 import numpy as np    # needed for formatting data
 import pandas as pd   # needed for formatting data
