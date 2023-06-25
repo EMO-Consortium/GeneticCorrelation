@@ -63,6 +63,8 @@ pfile$close_all()
 ## Run cellex
 ```python
 ### Python 3.10.4
+cd /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/
+python
 ### import packages
 import sys
 sys.path.append("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/")
