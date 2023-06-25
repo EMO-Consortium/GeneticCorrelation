@@ -60,6 +60,40 @@ pfile$close_all()
 
 ```
 
+* Additional preprocessing for Lung cells
+```R
+.libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
+dyn.load("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib/libhdf5_hl.so.310", lib.loc = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib")
+library(Seurat)
+library(tidyverse)
+library(here)
+library(data.table)
+library(RLinuxModules)
+library(loomR)
+library(SeuratDisk)
+library(R.utils)
+
+setwd("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/Lung_SciAdv")
+ctrl <- readRDS("Ctrl.seurat.RDS")
+
+## remove outlier cells
+ctrl@meta.data$outlier<-F
+ctrl@meta.data$outlier[grep("Outlier",ctrl@meta.data$Subclass_Cell_Identity)]<-T
+ctrl.clean<-subset(ctrl, subset=outlier==F)
+
+## myeloid
+sub<-subset(ctrl.clean, subset=CellType_Category=="Myeloid")
+sub <- FindVariableFeatures(object = sub)
+pfile <- as.loom(x = sub, filename = "Myeloid.loom", verbose = TRUE, overwrite = TRUE)
+pfile$close_all()
+
+other<-subset(ctrl.clean, subset=CellType_Category!="Myeloid")
+other <- FindVariableFeatures(object = other)
+pfile <- as.loom(x = other, filename = "Lung_other.loom", verbose = TRUE, overwrite = TRUE)
+pfile$close_all()
+
+```
+
 ## Run cellex
 ```python
 ### Python 3.10.4
