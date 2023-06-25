@@ -6,6 +6,7 @@
 
 ```
 ## Start MR
+* Buil R script
 ```R
 .libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/Rpackage")
 library(TwoSampleMR)
@@ -35,7 +36,7 @@ dat_clump <- ld_clump(
   bfile = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Reference/EUR"
 )
 dat_exp=dat_exp[dat_exp$SNP %in% dat_clump$rsid,]
-dat_exp=dat_exp[dat_exp$pval.exposure<5e-6,]
+dat_exp=dat_exp[dat_exp$pval.exposure<5e-8,]
 
 ### harmonize
 dat_harm <- harmonise_data(
@@ -58,3 +59,15 @@ write.table(test_pleiotropy,file = paste(outcome.name,exposure.name,"pleiotropy.
 
 
 ```
+
+*Generate bash jobs
+```bash
+while IFS= read -r file1; do
+    while IFS= read -r file2; do
+        # 在这里执行你的操作，使用 $file1 和 $file2
+        echo "处理文件：$file1 和 $file2"
+    done < gwas_sum_gut.txt
+done < gwas_sum_lung.txt
+```
+
+
