@@ -65,9 +65,12 @@ pfile$close_all()
 ### Python 3.10.4
 cd /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/cellex
 python
+
 ### import packages
 import sys
 sys.path.append("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/")
+
+para1 = int(sys.argv[1])
 
 import loompy         # needed for importing data
 import numpy as np    # needed for formatting data
