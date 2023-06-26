@@ -70,4 +70,36 @@ while IFS= read -r file1; do
 done < gwas_sum_lung.txt
 ```
 
+*Merge results
+```R
+## load results
+file_names <- list.files("./Out_D1", pattern = "*.MR.txt", full.names = TRUE)
+combined_data <- data.frame()
+combined_data <- do.call(rbind, lapply(file_names, function(file) {
+  read.table(file, sep = "\t", header = TRUE)}))
+
+file_names <- list.files("./Out_D1", pattern = "*.heterogeneity.txt", full.names = TRUE)
+heter <- data.frame()
+heter <- do.call(rbind, lapply(file_names, function(file) {
+  read.table(file, sep = "\t", header = TRUE)}))
+
+file_names <- list.files("./Out_D1", pattern = "*.pleiotropy.txt", full.names = TRUE)
+plei <- data.frame()
+plei <- do.call(rbind, lapply(file_names, function(file) {
+  read.table(file, sep = "\t", header = TRUE)}))
+
+## Merge results
+combined_data$matchid<-paste0(combined_data$outcome,"_",combined_data$exposure,"_",combined_data$method)
+heter$matchid<-paste0(heter$outcome,"_",heter$exposure,"_",heter$method)
+heter1<-heter[match(combined_data$matchid,heter$matchid),]
+df.res1<-cbind(combined_data,heter1[,c("Q","Q_df","Q_pval")])
+
+combined_data$matchid2<-paste0(combined_data$outcome,"_",combined_data$exposure)
+plei$matchid2<-paste0(plei$outcome,"_",plei$exposure)
+plei1<-plei[match(combined_data$matchid2,plei$matchid2),]
+df.res<-cbind(df.res1,plei1[,c("egger_intercept","se","pval")])
+
+write.csv(df.res,file="MR_results_merge1_D1.csv")
+
+```
 
