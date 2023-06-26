@@ -561,6 +561,12 @@ cd /groups/umcg-griac/tmp01/projects/umcg-cqi/geneticcorrelation/tools/tmp.conda
 ./conda info --envs
 conda activate snakemake
 
+# Note: pybedtools sometimes needs update which could lead to "no module named pybedtools", to avoid this:
+cd pybedtools
+python setup.py develop
+python setup.py cythonize develop
+see https://daler.github.io/pybedtools/main.html
+
 Then follow the tutorial https://github.com/perslab/CELLECT/wiki/CELLECT-LDSC-Tutorial and https://github.com/perslab/CELLECT/wiki/CELLECT-MAGMA-Tutorial
 ```
 
