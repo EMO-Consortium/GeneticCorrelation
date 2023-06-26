@@ -22,10 +22,10 @@ test_outcome$NA.=NULL
 exposure.name=tools::file_path_sans_ext(basename("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/GWAS_clean/FEV1_to_FVC.txt"))
 outcome.name=tools::file_path_sans_ext(basename("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/GWAS_clean/CD.txt"))
 
-colnames(test_exposure)=c("SNP","effect_allele","other_allele","eaf","beta","se","P","Phenotype")
+colnames(test_exposure)=c("SNP","effect_allele","other_allele","eaf","beta","se","P")
 test_exposure$Phenotype=exposure.name
 dat_exp <- format_data(test_exposure, type="exposure")
-colnames(test_outcome)=c("SNP","effect_allele","other_allele","eaf","beta","se","P","Phenotype")
+colnames(test_outcome)=c("SNP","effect_allele","other_allele","eaf","beta","se","P")
 test_outcome$Phenotype=outcome.name
 dat_out <- format_data(test_outcome, type="outcome")
 
