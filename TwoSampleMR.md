@@ -89,10 +89,13 @@ plei <- do.call(rbind, lapply(file_names, function(file) {
   read.table(file, sep = "\t", header = TRUE)}))
 
 ## Merge results
-combined_data$matchid<-paste0(combined_data$outcome,"_",combined_data$exposure,"_",combined_data$method)
-heter$matchid<-paste0(heter$outcome,"_",heter$exposure,"_",heter$method)
-heter1<-heter[match(combined_data$matchid,heter$matchid),]
-df.res1<-cbind(combined_data,heter1[,c("Q","Q_df","Q_pval")])
+combined_data$matchid<-paste0(combined_data$outcome,"_",combined_data$exposure)
+
+heter1<-heter[which(heter$method=="MR Egger"),]
+heter1$matchid<-paste0(heter1$outcome,"_",heter1$exposure)
+
+heter2<-heter1[match(combined_data$matchid,heter1$matchid),]
+df.res1<-cbind(combined_data,heter2[,c("Q","Q_df","Q_pval")])
 
 combined_data$matchid2<-paste0(combined_data$outcome,"_",combined_data$exposure)
 plei$matchid2<-paste0(plei$outcome,"_",plei$exposure)
@@ -100,6 +103,8 @@ plei1<-plei[match(combined_data$matchid2,plei$matchid2),]
 df.res<-cbind(df.res1,plei1[,c("egger_intercept","se","pval")])
 
 write.csv(df.res,file="MR_results_merge1_D1.csv")
+
+df.egger<-df.res[which(df.res$method=="MR Egger"),]
 
 ```
 
