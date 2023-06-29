@@ -13,6 +13,8 @@ R
 .libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
 dyn.load("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib/libhdf5_hl.so.310", lib.loc = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib")
 install.packages("hdf5r",configure.args="--with-hdf5=/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/bin/h5cc")
+remotes::install_github("mojaveazure/seurat-disk")
+
 ```
 
 ## Data preprocessing
@@ -91,6 +93,44 @@ other<-subset(ctrl.clean, subset=CellType_Category!="Myeloid")
 other <- FindVariableFeatures(object = other)
 pfile <- as.loom(x = other, filename = "Lung_other.loom", verbose = TRUE, overwrite = TRUE)
 pfile$close_all()
+
+```
+
+* Additional preprocessing for blood cells
+```R
+.libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
+dyn.load("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib/libhdf5_hl.so.310", lib.loc = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib")
+
+library(Seurat)
+library(tidyverse)
+library(here)
+library(data.table)
+library(RLinuxModules)
+library(loomR)
+library(SeuratDisk)
+library(R.utils)
+
+setwd("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/PBMC")
+
+## dataset1: covid_blish: https://www.covid19cellatlas.org/index.patient.html (this one:Peripheral Blood Mononuclear Cells (PBMCs), Blish lab)
+## paper:https://www.nature.com/articles/s41591-020-0944-y 
+pbmc<-readRDS("./covid_blish/blish_covid.seu.rds")
+ctrl<-subset(pbmc, subset=Status=="Healthy")
+
+ctrl <- FindVariableFeatures(object = ctrl)
+pfile <- as.loom(x = ctrl, filename = "PBMC_blish.loom", verbose = TRUE, overwrite = TRUE)
+pfile$close_all()
+
+## dataset2: onek1k
+## only keep the young-mid adult, still to large
+ctrl<-subset(pbmc, subset=age_group<65)
+
+## another bigger dataset: The covid blood scRNAseq data was download from:https://data.humancellatlas.org/explore/projects/b963bd4b-4bc1-4404-8425-69d74bc636b8
+## paper: https://www.nature.com/articles/s41591-021-01329-2
+Convert("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/PBMC/covid/covid_portal.h5ad", ".h5seurat")
+# You should make quit R and then load again so that you can read the .h5seurat
+# This .d5seurat object can then be read manually
+seuratObject <- LoadH5Seurat("/covid/.h5seurat") ## failed in converting the data
 
 ```
 
