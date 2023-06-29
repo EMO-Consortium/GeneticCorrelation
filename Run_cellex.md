@@ -113,7 +113,8 @@ library(R.utils)
 setwd("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/PBMC")
 
 ## dataset1: covid_blish: https://www.covid19cellatlas.org/index.patient.html (this one:Peripheral Blood Mononuclear Cells (PBMCs), Blish lab)
-## paper:https://www.nature.com/articles/s41591-020-0944-y 
+## paper:https://www.nature.com/articles/s41591-020-0944-y
+## can also check data from this paper: https://rupress.org/jem/article/218/8/e20210582/212379/Multi-omic-profiling-reveals-widespread
 pbmc<-readRDS("./covid_blish/blish_covid.seu.rds")
 ctrl<-subset(pbmc, subset=Status=="Healthy")
 
