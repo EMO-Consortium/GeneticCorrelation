@@ -1,0 +1,17 @@
+
+
+```bash
+ml plink
+/groups/umcg-griac/tmp01/projects/umcg-cqi/software/smr-1.3.1-linux-x86_64/smr-1.3.1 \
+--bfile /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Reference/g1000_eur \
+--gwas-summary /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/GWAS_clean/CD.txt \
+--beqtl-summary /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/eQTLGen/Candidate.SMR.eQTLGen \
+--diff-freq-prop 0.9 --diff-freq 1 \
+--out myplot --thread-num 10 \
+--plot --probe ENSG00000180448 --probe-wind 500 \
+--gene-list /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Reference/glist-hg38
+
+
+smr --bfile mydata --gwas-summary mygwas.ma --beqtl-summary myeqtl --out myplot --plot --probe rs2365709 --probe-wind 500
+
+```
