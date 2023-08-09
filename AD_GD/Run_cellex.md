@@ -135,6 +135,46 @@ seuratObject <- LoadH5Seurat("/covid/.h5seurat") ## failed in converting the dat
 
 ```
 
+*Additional reprocessing for blood cells one1k
+```R
+### R/4.2.2-foss-2022a-bare
+.libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
+dyn.load("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib/libhdf5_hl.so.310", lib.loc = "/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/hdf5/lib")
+library(Seurat)
+library(tidyverse)
+library(here)
+library(data.table)
+library(RLinuxModules)
+library(loomR)
+library(SeuratDisk)
+library(R.utils)
+
+setwd("/groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/scRNAseq/data/PBMC")
+
+dat<-readRDS("local.rds")
+dat1<-subset(dat,subset=age<80)
+
+### random 100 samples
+metadata<-dat1@meta.data
+set.seed(11111)
+sample.id<-sample(as.character(metadata$donor_id), size=100, replace =F)
+
+dat1@meta.data$sel<-0
+dat1@meta.data$sel[which(dat1@meta.data$donor_id %in% sample.id)]<-1
+
+### extract data
+dat2<-subset(dat1,subset=sel==1)
+
+df.meta<-dat2@meta.data
+df.meta<-df.meta[,c("orig.ident","nCount_RNA","nFeature_RNA","donor_id","cell_type")]
+dat2@meta.data<-df.meta
+
+dat2 <- FindVariableFeatures(object = dat2)
+pfile <- as.loom(x = dat2, filename = "PBMC_onek1k_100.loom", verbose = TRUE, overwrite = TRUE)
+### Close the .loom file after all
+pfile$close_all()
+```
+
 ## Run cellex
 ```python
 ### Python 3.10.4
