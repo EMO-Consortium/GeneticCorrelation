@@ -83,6 +83,13 @@ ctrl@meta.data$outlier<-F
 ctrl@meta.data$outlier[grep("Outlier",ctrl@meta.data$Subclass_Cell_Identity)]<-T
 ctrl.clean<-subset(ctrl, subset=outlier==F)
 
+## Remove multiplet
+ctrl.clean<-subset(ctrl.clean, subset=CellType_Category!="Multiplet")
+
+ctrl.clean <- FindVariableFeatures(object = ctrl.clean)
+pfile <- as.loom(x = ctrl.clean, filename = "Lung.loom", verbose = TRUE, overwrite = TRUE)
+pfile$close_all()
+
 ## myeloid
 sub<-subset(ctrl.clean, subset=CellType_Category=="Myeloid")
 sub <- FindVariableFeatures(object = sub)
