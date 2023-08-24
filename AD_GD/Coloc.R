@@ -1,3 +1,4 @@
+
 options = commandArgs(trailingOnly = TRUE)
 eqtl_file=options[1]
 mbqtl_path=options[2]
@@ -41,3 +42,5 @@ coloc.result = foreach(i=1:length(temp),.combine = rbind) %do%  {
 }
 
 write.table(coloc.result,file = paste(eqtl_file,name,"coloc.txt",sep = "_"),quote=F,row.names=F)
+
+
