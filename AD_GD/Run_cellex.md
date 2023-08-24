@@ -184,7 +184,7 @@ pfile$close_all()
 
 ## Run cellex
 ```python
-### Python 3.10.4
+### ml Python 3.10.4
 cd /groups/umcg-griac/tmp01/projects/umcg-cqi/GeneticCorrelation/Tools/CELLEX/cellex
 python
 
