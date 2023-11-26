@@ -227,3 +227,46 @@ eso.compute(verbose=True)
 eso.save_as_csv(file_prefix=prefixData, path=dirOut, verbose=True)
     
 ```
+
+## Annotation of the gene to keep consistency with GWAS data
+```R
+## for the dataset of the airway and the lung tissue, the gene was used as a gene symbol, while in GWAS, it's ensemble ID
+## run annotation by biomart for the dataset
+
+.libPaths("/groups/umcg-griac/tmp01/projects/umcg-cqi/software/Rpackage/4.0/")
+library(tidyverse)
+library(biomaRt)
+
+## load data
+
+dat<-read.csv("Airway_anno.esmu.csv")
+
+mart <- useEnsembl("ENSEMBL_MART_ENSEMBL",GRCh = 37)
+ensemble<-useDataset(dataset="hsapiens_gene_ensembl",mart = mart)
+ensid<-unique(dat$gene)
+anno_rna<-getBM(attributes = c('ensembl_gene_id','hgnc_symbol', 'chromosome_name',
+                               'start_position', 'end_position', 'band', "description"),
+                filters = 'hgnc_symbol', 
+                values = ensid, 
+                mart = ensemble)
+
+## duplicated samples
+anno_rna1<-anno_rna[-grep("HG|HS",anno_rna$chromosome_name),]
+
+a<-anno_rna1$hgnc_symbol[duplicated(anno_rna1$hgnc_symbol)==T]
+b<-anno_rna1[which(anno_rna1$hgnc_symbol %in% a),]
+c<-c("ENSG00000270386","ENSG00000260083")
+
+anno_rna2<-anno_rna1[-which(anno_rna1$ensembl_gene_id %in% c),]
+
+## make new file
+keep<-intersect(anno_rna2$hgnc_symbol,dat$gene)
+
+dat1<-dat[match(keep,dat$gene),]
+newid<-anno_rna2$ensembl_gene_id[match(dat1$gene,anno_rna2$hgnc_symbol)]
+dat1$gene<-newid
+
+write.csv(dat1,file = "Airway_anno_ensg.esmu.csv",row.names = F,quote = F)
+
+
+```
